@@ -1,9 +1,10 @@
 import logging
-from crewai import Agent, Task, LLM
+from crewai import Agent, Task, LLM as CrewAILLM # Renamed to avoid conflict
 from typing import Optional
 from pathlib import Path
 from config.settings import get_settings
 from tools.analytics_tools import get_stripe_service_status, get_common_stripe_integration_issues
+from models.ollama_llm import get_ollama_llm_config
 from models.gemini_llm import get_gemini_llm
 
 logger = logging.getLogger(__name__)
@@ -40,15 +41,38 @@ class StripeExpertAgent:
             self.knowledge_base = "Error: Could not load knowledge base."
 
     def _initialize_llm(self):
-        try:
-            llm_params = get_gemini_llm()
-            self.llm = LLM(
-                model=llm_params["model"],
-                api_key=llm_params["google_api_key"]
-            )
-        except Exception as e:
-            logger.critical(f"Failed to initialize CrewAI LLM: {str(e)}")
-            raise
+        llm_provider = settings.LLM_PROVIDER.lower()
+        logger.info(f"Initializing LLM with provider: {llm_provider}")
+
+        if llm_provider == "ollama":
+            try:
+                ollama_config = get_ollama_llm_config()
+                logger.info(f"Initializing LLM with given: {ollama_config}")
+                self.llm = CrewAILLM(
+                    model=ollama_config["model_name"],
+                    api_base=ollama_config["api_url"]
+                )
+            except Exception as e:
+                logger.critical(f"Failed to initialize Ollama LLM: {str(e)}")
+                logger.info(f"Ollama settings: URL='{settings.OLLAMA_API_URL}', Model='{settings.OLLAMA_MODEL_NAME}'")
+                raise
+        elif llm_provider == "gemini":
+            try:
+                gemini_params = get_gemini_llm()
+                self.llm = CrewAILLM( # Use the renamed CrewAILLM for Gemini
+                    model_name=gemini_params["model"], # CrewAI's LLM expects model_name
+                    google_api_key=gemini_params["google_api_key"]
+                )
+                # CrewAI's LLM doesn't have a direct invoke, initialization itself is the test.
+                logger.info(f"Successfully initialized Gemini LLM with model {gemini_params['model']}")
+            except Exception as e:
+                logger.critical(f"Failed to initialize Gemini LLM: {str(e)}")
+                logger.info(f"Gemini API Key is set: {'Yes' if settings.GEMINI_API_KEY else 'No'}")
+                raise
+        else:
+            error_msg = f"Unsupported LLM_PROVIDER: '{settings.LLM_PROVIDER}'. Must be 'ollama' or 'gemini'."
+            logger.critical(error_msg)
+            raise ValueError(error_msg)
 
     def _initialize_agent(self):
         try:

@@ -12,6 +12,12 @@ pip3 install -r requirements.txt
 
 # Check .env is setup
 
+#When LLM_PROVIDER is set to "ollama",
+#the agent will use your local Ollama model.
+#Make sure your Ollama server is running.
+#When LLM_PROVIDER is set to "gemini", it will use the Gemini API.
+
+
 # Run the server
 uvicorn main:app --reload
 

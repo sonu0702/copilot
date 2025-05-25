@@ -6,6 +6,9 @@ from pydantic_settings import BaseSettings
 class Settings(BaseSettings):
     GEMINI_API_KEY: str
     KNOWLEDGE_BASE_PATH: str = "knowledgebase/navadr.txt"
+    OLLAMA_API_URL: str = "http://127.0.0.1:11434/api/chat"
+    OLLAMA_MODEL_NAME: str = "llama3.2:latest"
+    LLM_PROVIDER: str = "ollama"  # Default to gemini, can be "ollama"
 
     class Config:
         env_file = ".env"
