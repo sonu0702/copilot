@@ -1,0 +1,20 @@
+Stripe is a technology company that builds economic infrastructure for the internet. Businesses of every size—from new startups to public companies—use Stripe's software to accept payments and manage their businesses online.
+Stripe offers a suite of payment APIs that powers commerce for online businesses of all sizes, including fraud prevention, and subscription management.
+Stripe's main products include payment processing, billing, connect (for marketplaces), and radar (for fraud detection).
+Stripe supports a wide variety of payment methods, including credit cards, debit cards, and popular digital wallets.
+Stripe was founded in 2010 by Patrick and John Collison.
+Stripe's headquarters are in San Francisco, California, and Dublin, Ireland.
+Stripe provides tools for developers to integrate its payment platform into websites and mobile applications.
+Key features of Stripe include:
+- Online payment processing for various card types (Visa, Mastercard, American Express, etc.)
+- Support for international payments and multiple currencies.
+- Subscription and recurring billing management.
+- Marketplace functionality with Stripe Connect to handle payments for third-party sellers.
+- Advanced fraud detection and prevention with Stripe Radar.
+- Invoicing capabilities.
+- Reporting and analytics dashboards.
+- Secure handling of sensitive payment information, complying with PCI DSS standards.
+Stripe is known for its developer-friendly APIs and extensive documentation.
+Stripe competes with other payment processors like PayPal, Square, and Adyen.
+To use Stripe, businesses typically sign up for an account, integrate Stripe's APIs or SDKs into their platform, and configure their payment settings.
+Stripe charges fees on a per-transaction basis, which can vary depending on the payment method and other factors.
